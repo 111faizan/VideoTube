@@ -27,6 +27,14 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
+// ✅ Root route added here
+app.get("/", (req, res) => {
+  res.json({
+    message: "Videotube Backend API is Live 🚀",
+    status: "success",
+  });
+});
+
 app.use("/api/v1/healthcheck", healthcheckRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/tweets", tweetRouter);
@@ -37,22 +45,15 @@ app.use("/api/v1/likes", likeRouter);
 app.use("/api/v1/playlist", playlistRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
 
-
-
-
-// common error handler middlerware
+// common error handler middleware
 app.use((err, req, res, next) => {
-  
-  let {statusCode=500, message="some error occurred"} = err
+  let { statusCode = 500, message = "some error occurred" } = err;
 
   return res.status(statusCode).json({
     success: false,
     error: message,
-    errors: err.errors || []
-  })
-})
-
-
-// http://localhost:8000/api/v1/users/register
+    errors: err.errors || [],
+  });
+});
 
 export { app };
